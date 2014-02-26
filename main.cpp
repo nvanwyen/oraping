@@ -79,53 +79,60 @@ int main( int argc, char** argv )
     int ms = 0;
     bool ok = false;
 
-    tns tns( argv[ 1 ] );
+	try
+	{
+		tns tns( argv[ 1 ] );
 
-    //
-    cout << "Using: " << tns.tnsnames() << endl;
+		//
+		cout << "Using: " << tns.tnsnames() << endl;
 
-    //
-    if ( tns.sqlnet().length() > 0 )
-        cout << "       " << tns.sqlnet() << endl;
+		//
+		if ( tns.sqlnet().length() > 0 )
+			cout << "       " << tns.sqlnet() << endl;
 
-    //
-    if ( tns.ldap().length() > 0 )
-        cout << "       " << tns.ldap() << endl;
+		//
+		if ( tns.ldap().length() > 0 )
+			cout << "       " << tns.ldap() << endl;
 
-    //
-    cout << endl;
+		//
+		cout << endl;
 
-    //
-    cout << "Resolved with " << tns.type() << endl;
+		//
+		cout << "Resolved with " << tns.type() << endl;
 
-    //
-    if ( tns.name().length() > 0 )
-        cout << tns.name() << " = ";
+		//
+		if ( tns.name().length() > 0 )
+			cout << tns.name() << " = ";
 
-    //
-    cout << tns.desc() << endl << endl;
+		//
+		cout << tns.desc() << endl << endl;
 
-    for ( int i = 0; i < itr; ++i )
-    {
-        time = clock();
+		for ( int i = 0; i < itr; ++i )
+		{
+			time = clock();
 
-        try
-        {
-            ora( argv[ 1 ] ).attach();
-            ok = true;
-        }
-        catch ( mti::exp& x )
-        {
-            ok = false;
-            cerr << x.what();
-        }
+			try
+			{
+				ora( argv[ 1 ] ).attach();
+				ok = true;
+			}
+			catch ( mti::exp& x )
+			{
+				ok = false;
+				cerr << x.what();
+			}
 
-        //
-        ms = (int)double( clock() - time ) / CLOCKS_PER_SEC * 1000;
-        cout << ( ( ok ) ? "OK (" : "(" ) << ms << " ms)" << endl;
-    }
+			//
+			ms = (int)double( clock() - time ) / CLOCKS_PER_SEC * 1000;
+			cout << ( ( ok ) ? "OK (" : "(" ) << ms << " ms)" << endl;
+		}
+	}
+	catch ( mti::exp& x )
+	{
+		cerr << x.what() << endl;
+	}
 
-    //
-    cout << endl;
+	//
+	cout << endl;
     return 0;
 }

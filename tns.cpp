@@ -306,17 +306,45 @@ void tns::reconcile( string ent )
         {
             //
             if ( ( *i == "TNSNAMES" ) || ( *i == "EZCONNECT" ) )
-                load_tnsnames();
+			{
+				try
+				{
+					load_tnsnames();
+				}
+				catch ( exp& x )
+				{
+					throw exp( x.what(), x.code() );
+				}
+			}
 
-            if ( *i == "LDAP" )
-                load_ldap();
+			if ( *i == "LDAP" )
+			{
+				try
+				{
+					load_ldap();
+				}
+				catch ( exp& x )
+				{
+					throw exp( x.what(), x.code() );
+				}
+			}
 
             if ( *i == "ONAMES" )
                 throw exp( "Unsupported naming type [" + (*i) + "]!", EXP_UNSUPPORTED );
         }
     }
     else
-        load_tnsnames();
+	{
+		try
+		{
+			load_tnsnames();
+		}
+		catch ( exp& x )
+		{
+			cerr << "Could not load TNS Names file: " << x.what() << endl;
+			throw x;
+		}
+	}
 
     //
     entry_ = resolve( ent, resolve( ent ) );
@@ -631,7 +659,7 @@ size_t tns::load_tnsnames()
             }
         }
         else
-            throw exp( "TNS Names file [tnsnames.ora] is invalid", EXP_MISSING );
+            throw exp( "TNS Names file [tnsnames.ora] not found or is invalid", EXP_MISSING );
     }
 
     //
