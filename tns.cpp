@@ -595,10 +595,18 @@ size_t tns::load_tnsnames()
                 lvl = 0;
 
                 //
-                while ( getline( ifs, buf ) )
+                while ( std::getline( ifs, buf ) )
                 {
                     //
                     buf = trim( buf );
+
+                    //
+                    if ( trim( buf ) == string( "" ) )
+                    {
+                        // reset on empty line
+                        ent = dsc = ""; flg = true; lvl = 0;
+                        continue;
+                    }
 
                     //
                     if ( buf.substr( 0, 1 ) == "#" )
@@ -608,12 +616,26 @@ size_t tns::load_tnsnames()
                         continue;
                     }
 
+/*
+                    //
+                    if ( buf.substr( 0, 1 ) == "" )
+                    {
+                        // reset on blank line
+                        ent = dsc = ""; flg = true; lvl = 0;
+                        continue;
+                    }
+*/
                     //
                     for ( size_t i = 0; i < buf.length(); ++i )
                     {
                         //
+                        if ( buf[ i ] == ' ' )
+                            continue;
+
+                        //
                         if ( flg )
                         {
+                            //
                             if ( buf[ i ] != '=' )
                             {
                                 if ( ( buf[ i ] == ' ' ) || ( buf[ i ] == '\t' ) )
