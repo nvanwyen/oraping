@@ -616,15 +616,6 @@ size_t tns::load_tnsnames()
                         continue;
                     }
 
-/*
-                    //
-                    if ( buf.substr( 0, 1 ) == "" )
-                    {
-                        // reset on blank line
-                        ent = dsc = ""; flg = true; lvl = 0;
-                        continue;
-                    }
-*/
                     //
                     for ( size_t i = 0; i < buf.length(); ++i )
                     {
