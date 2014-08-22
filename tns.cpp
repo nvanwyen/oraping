@@ -35,6 +35,7 @@
 // boost
 
 // local
+#include "main.h"
 #include "tns.h"
 #include "exp.h"
 #include "ldp.h"
@@ -353,32 +354,8 @@ void tns::reconcile( string ent )
 //
 string tns::env( string var )
 {
-	string val;
-
-#if !defined(DOS) && !defined(_WIN32) && !defined(WINSOCK)
-    char* tmp = ::getenv( var.c_str() );
-	val = string( ( ( tmp == NULL ) ? "" : tmp ) );
-#else
-	char* tmp = NULL;
-	size_t sz;
-
-	::getenv_s( &sz, NULL, 0, var.c_str() );
-
-	if ( sz > 0 )
-	{
-		tmp = (char*)::malloc( sz * sizeof(char) );
-
-		if ( tmp )
-		{
-			::getenv_s( &sz, tmp, sz, var.c_str() );
-			val = string( tmp );
-
-			::free( tmp );
-		}
-	}
-#endif
-
-	return val;
+    // defer to main.h
+    return ::env( var );
 }
 
 //
@@ -889,9 +866,7 @@ size_t tns::load_ldap()
                     }
                     else
                     {
-                        perror( "ldap_init" );
                         throw exp ( "LDAP initialization failed", rc );
-                        //throw exp ( "LDAP initialization failed: " + string( ::ldap_err2string( rc ) ), rc );
                     }
                 }
                 else

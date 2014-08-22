@@ -17,14 +17,21 @@
 // c
 
 // c++
+#include <string>
 
 // boost
 
 // local
-#include "release.h"
 
 //
 void usage();
+
+//
+bool is_numeric( char *val );
+std::string env( std::string var );
+
+// default SID (based on environment variables)
+std::string sid( void );
 
 //
 int main( int argc, char** argv );
