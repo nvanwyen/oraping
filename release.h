@@ -18,8 +18,8 @@
 
 //
 #define APPLICATION         "Oracle Ping (oraping)"
-#define VERSION             "1.0.0.1"
-#define BUILD               "1"
+#define VERSION             "1.0.0.2"
+#define BUILD               "4"
 #define CORPORATION         "Metasystems Technologies Inc. (MTI)"
 #define COPYWRITE           "Copyright (c) 2004, 2014, MTI.  All rights reserved."
 
