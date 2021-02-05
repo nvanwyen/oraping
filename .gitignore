@@ -14,7 +14,12 @@
 
 # directories
 archive
+<<<<<<< HEAD
 bin
 bin/debug
 bin/release
 visualstudio
+=======
+archive/*
+bin/*
+>>>>>>> 136e2be606b6b8b51fccc4ff9d4b30f0163ad978

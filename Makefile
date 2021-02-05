@@ -9,7 +9,7 @@ AR = ar
 LD = g++
 WINDRES = windres
 
-INC = -I$(ORACLE_HOME)/rdbms/public
+INC = -I$(ORACLE_HOME)/include
 CFLAGS = -Wall -fexceptions -Wwrite-strings
 RESINC = 
 LIBDIR = -L$(ORACLE_HOME)/lib
