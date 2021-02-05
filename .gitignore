@@ -14,4 +14,7 @@
 
 # directories
 archive
-archive/*
+bin
+bin/debug
+bin/release
+visualstudio
