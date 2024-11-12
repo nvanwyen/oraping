@@ -10,7 +10,7 @@ LD = g++
 WINDRES = windres
 
 INC = -I$(ORACLE_HOME)/include
-CFLAGS = -Wall -fexceptions -Wwrite-strings
+CFLAGS = -std=c++11 -Wall -fexceptions -Wwrite-strings
 RESINC = 
 LIBDIR = -L$(ORACLE_HOME)/lib
 LIB = -lclntsh

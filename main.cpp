@@ -17,6 +17,7 @@
 #include <time.h>
 
 // c++
+#include <chrono>
 #include <iostream>
 
 // boost
@@ -200,7 +201,7 @@ int main( int argc, char** argv )
             itr = 1;
     }
 
-    clock_t time;
+    std::chrono::steady_clock::time_point time;
     int ms = 0;
     bool ok = false;
 
@@ -235,7 +236,7 @@ int main( int argc, char** argv )
         rc = 0;
 		for ( int i = 0; i < itr; ++i )
 		{
-			time = clock();
+            time = std::chrono::steady_clock::now();
 
 			try
 			{
@@ -249,8 +250,11 @@ int main( int argc, char** argv )
 				cerr << x.what();
 			}
 
+            //
+            std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+            ms = std::chrono::duration_cast<std::chrono::milliseconds>( end - time ).count();
+
 			//
-			ms = (int)double( clock() - time ) / CLOCKS_PER_SEC * 1000;
 			cout << ( ( ok ) ? "OK (" : "(" ) << ms << " ms)" << endl;
 		}
 	}
