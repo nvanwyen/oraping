@@ -16,3 +16,6 @@
 archive
 build
 bin
+
+# MacOS
+.DS_Store

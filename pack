@@ -1,0 +1,111 @@
+#!/bin/bash
+
+#
+prj="Ora*Ping"
+bin="bin/"
+src="CMakeLists.txt construct configure configure.bat  pack source/ cmake/"
+txt="LICENSE README.md VERSION"
+
+#
+arg=${@}
+dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+#
+function color_echo()
+{
+    local color=${1};
+    local exp=${2};
+
+    if ! [[ ${color} =~ '^[0-9]$' ]] ; then
+
+        case $(echo ${color} | tr '[:upper:]' '[:lower:]') in
+              black) color=0 ;;
+                red) color=1 ;;
+              green) color=2 ;;
+             yellow) color=3 ;;
+               blue) color=4 ;;
+            magenta) color=5 ;;
+               cyan) color=6 ;;
+            white|*) color=7 ;; # white or "other"
+        esac
+
+    fi
+
+    tput setaf ${color};
+    echo "${exp}";
+    tput sgr0;
+}
+
+#
+function rc()
+{
+    if [[ ${1} -eq 0 ]] ; then
+
+        color_echo green "ok"
+
+    else
+
+        color_echo red "failed"
+
+    fi
+
+}
+
+cd "${dir}/"
+
+ver=$(grep "version: " ${dir}/VERSION | awk -F ":" '{print $2}' | tr -d ' ')
+
+if [[ -z "${ver}" ]] ; then
+
+    color_echo red "Cannot confirm project build version"
+    exit 1
+
+fi
+
+color_echo magenta "Processing ${prj} ${ver}"
+
+echo -n "Archiving source ... "
+tar -zcvf archive/oraping.source.${ver}.tgz ${src} 2>/dev/null 1>/dev/null ; rc ${?}
+( cd archive/ && sha1sum oraping.source.${ver}.tgz > oraping.source.${ver}.sha )
+
+echo -n "Archiving binary ... "
+tar -zcvf archive/oraping.binary.${ver}.tgz ${bin} ${txt} 2>/dev/null 1>/dev/null ; rc ${?}
+( cd archive/ && sha1sum oraping.binary.${ver}.tgz > oraping.binary.${ver}.sha )
+
+echo -n "Archiving distribution ... "
+( cd archive/ && tar -zcvf oraping.${ver}.tgz oraping.source.${ver}.tgz \
+                                              oraping.source.${ver}.sha \
+                                              oraping.binary.${ver}.tgz \
+                                              oraping.binary.${ver}.sha 2>/dev/null 1>/dev/null ) ; rc ${?}
+( cd archive/ && sha1sum oraping.${ver}.tgz > oraping.${ver}.sha )
+
+cd archive/
+echo "# ${prj}"                              > oraping.${ver}.md
+echo "## Version: ${ver}"                   >> oraping.${ver}.md
+echo                                        >> oraping.${ver}.md
+echo "## Distribution"                      >> oraping.${ver}.md
+echo "\`\`\`"                               >> oraping.${ver}.md
+echo "$(sha1sum oraping.${ver}.sha)"        >> oraping.${ver}.md
+echo "$(sha1sum oraping.${ver}.tgz)"        >> oraping.${ver}.md
+echo "\`\`\`"                               >> oraping.${ver}.md
+echo                                        >> oraping.${ver}.md
+echo "### Source"                           >> oraping.${ver}.md
+echo "\`\`\`"                               >> oraping.${ver}.md
+echo "$(sha1sum oraping.source.${ver}.*)"   >> oraping.${ver}.md
+echo "\`\`\`"                               >> oraping.${ver}.md
+echo                                        >> oraping.${ver}.md
+echo "### Binary"                           >> oraping.${ver}.md
+echo "\`\`\`"                               >> oraping.${ver}.md
+echo "$(sha1sum oraping.binary.${ver}.*)"   >> oraping.${ver}.md
+echo "\`\`\`"                               >> oraping.${ver}.md
+echo                                        >> oraping.${ver}.md
+echo "Stamp: $(date)"                       >> oraping.${ver}.md
+
+echo
+echo "--- cut ---"
+echo
+cat oraping.${ver}.md
+echo
+echo "--- cut ---"
+
+exit 0

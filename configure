@@ -2,7 +2,7 @@
 
 #
 prj="Ora*Ping"
-tgt="bin/oraping"
+tgt="bin/oraping bin/tnsping"
 del=""
 
 #
@@ -99,16 +99,8 @@ function chkproj()
 #
 function clean()
 {
-    for t in ${tgt} ; do
-
-        if [ -f ${dir}/${t} ] ; then
-
-            color_echo red "Removing previous ${t}"
-            rm -f ${dir}/${t} 2>/dev/null
-
-        fi
-
-    done
+    cd ${dir}/
+    rm -f bin/*
 }
 
 #
@@ -139,8 +131,8 @@ function validate()
         #
         for t in ${tgt} ; do
     
-            if [ -f ${dir}/${t} ] ; then
-            
+            if [ -e ${dir}/${t} ] ; then
+
                 color_echo magenta "Found: ${t}" 
             
             else
@@ -221,4 +213,5 @@ color_echo green "Making TNS utilities"
 make -j${cpu} ${opt}
 chkrc ${?}
 
+( cd ${dir}/bin/ && ln -fs oraping tnsping )
 validate

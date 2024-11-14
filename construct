@@ -1,0 +1,13 @@
+#!/bin/bash
+
+#
+arg=${@}
+dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+cd ${dir}/
+
+./configure clean && echo && \
+./configure ${arg} && echo && \
+./pack ${arg}
+
+exit ${?}
