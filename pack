@@ -81,7 +81,7 @@ echo -n "Archiving distribution ... "
 
 cd archive/
 echo "# ${prj}"                              > oraping.${ver}.md
-echo "## Version: ${ver}"                   >> oraping.${ver}.md
+echo "_Release: ${ver}_"                    >> oraping.${ver}.md
 echo                                        >> oraping.${ver}.md
 echo "## Distribution"                      >> oraping.${ver}.md
 echo "\`\`\`"                               >> oraping.${ver}.md
